@@ -13,8 +13,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 preloader.classList.add('fade-out');
                 setTimeout(function() {
                     preloader.style.display = 'none';
-                }, 500);
-            }, 1000);
+                }, 200);
+            }, 200);
         });
 
         // If window already loaded
@@ -23,20 +23,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 preloader.classList.add('fade-out');
                 setTimeout(function() {
                     preloader.style.display = 'none';
-                }, 500);
-            }, 1000);
+                }, 200);
+            }, 200);
         }
     }
 
     // Initialize AOS Animation Library with delay for preloader
     setTimeout(function() {
         AOS.init({
-            duration: 1000,
+            duration: 400,
             once: true,
             mirror: false,
             offset: 50
         });
-    }, 1500);
+    }, 400);
 
     // Typed.js for animated text in hero section
     const options = {
@@ -204,19 +204,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 {
                     title: 'Scoreboard',
                     description: 'An embedded system capable of adjusting game scores.',
-                    image: 'project4.jpg',
+                    image: 'scoreboard.jpg',
                     category: 'IoT'
                 },
                 {
                     title: 'Weather App',
                     description: 'Displays live weather using an API.',
-                    image: 'project5.jpg',
+                    image: 'weather.jpg',
                     category: 'Web App'
                 },
                 {
                     title: 'House Price Prediction',
                     description: 'Utilizes big data to forecast house prices.',
-                    image: 'project6.jpg',
+                    image: 'house.jpeg',
                     category: 'ML/AI'
                 }
             ];

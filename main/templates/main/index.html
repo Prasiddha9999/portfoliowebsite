@@ -197,20 +197,23 @@
             <input type="hidden" name="date_converter" value="1">
             <div class="mb-3">
                 <label for="date" class="form-label">Date (YYYY-MM-DD)</label>
-                <input type="text" class="form-control" id="date" name="date" placeholder="YYYY-MM-DD" required>
+                <input type="date" class="form-control" id="date" name="date" required>
+                <div class="form-text">
+                    <small>Examples: 2059-06-09 (BS) ↔ 2002-09-25 (AD)</small>
+                </div>
             </div>
             <div class="mb-3">
                 <label class="form-label">Conversion Type</label>
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="conversion_type" id="en_to_np" value="en_to_np" checked>
                     <label class="form-check-label" for="en_to_np">
-                        English to Nepali
+                        AD to BS (English to Nepali)
                     </label>
                 </div>
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="conversion_type" id="np_to_en" value="np_to_en">
                     <label class="form-check-label" for="np_to_en">
-                        Nepali to English
+                        BS to AD (Nepali to English)
                     </label>
                 </div>
             </div>
