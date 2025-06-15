@@ -255,7 +255,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const themeSwitcher = document.getElementById('theme-switcher');
     if (themeSwitcher) {
         const themeIcon = themeSwitcher.querySelector('i');
-        const themeLabel = themeSwitcher.querySelector('.theme-label');
         let darkMode = localStorage.getItem('darkMode') === 'enabled';
 
         // Function to apply dark mode
@@ -266,14 +265,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.body.classList.add('dark-mode');
                 document.getElementById('html-root').classList.add('dark-mode');
 
-                // Update icon and label
+                // Update icon and add active class
                 if (themeIcon) {
                     themeIcon.classList.remove('fa-moon');
                     themeIcon.classList.add('fa-sun');
                 }
-                if (themeLabel) {
-                    themeLabel.textContent = 'Light Mode';
-                }
+                themeSwitcher.classList.add('active');
 
                 // Store preference
                 localStorage.setItem('darkMode', 'enabled');
@@ -292,14 +289,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.body.classList.remove('dark-mode');
                 document.getElementById('html-root').classList.remove('dark-mode');
 
-                // Update icon and label
+                // Update icon and remove active class
                 if (themeIcon) {
                     themeIcon.classList.remove('fa-sun');
                     themeIcon.classList.add('fa-moon');
                 }
-                if (themeLabel) {
-                    themeLabel.textContent = 'Dark Mode';
-                }
+                themeSwitcher.classList.remove('active');
 
                 // Clear preference
                 localStorage.setItem('darkMode', null);

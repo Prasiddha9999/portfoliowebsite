@@ -83,10 +83,11 @@ def index(request):
         'name': 'Prasiddha Regmi',
         'title': 'Full Stack Web Application Developer',
         'email': 'regmisailesh9999@gmail.com',
-        'phone': '+91-9266892577',
-        'location': 'Greater Noida, Gamma -2',
-        'github': 'https://github.com/prasiddha-regmi-6937632211',
-        'linkedin': 'https://linkedin.com/in/prasiddha-regmi',
+        'phone': '+977-9863144095',
+        'location': 'Kohalpur - 10, Banke',
+        'location_link': 'https://g.co/kgs/3UCF7nh',
+        'github': 'https://github.com/Prasiddha9999',
+        'linkedin': 'https://www.linkedin.com/in/prasiddha-regmi-693763211/',
         'about': 'I am a Full Stack Web Application developer specialized in technologies like Python, Django, and React API, also having a good command of front-end technologies like HTML, CSS, and JavaScript. Passionate developer with strong administrative and communication skills, good attention to detail, and the ability to write neat and clean codes and develop projects with Python backend technologies.',
         'skills': {
             'technical': [

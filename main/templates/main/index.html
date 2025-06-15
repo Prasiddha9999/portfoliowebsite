@@ -180,7 +180,6 @@
     <!-- Theme Switcher -->
     <div class="theme-switcher" id="theme-switcher">
         <i class="fas fa-moon"></i>
-        <span class="theme-label">Dark Mode</span>
     </div>
 
     <!-- Date Converter Toggle Button -->
@@ -286,7 +285,7 @@
                     <p class="lead">{{ title }}</p>
                     <div class="hero-btns">
                         <a href="#contact" class="btn btn-primary me-3">Contact Me</a>
-                        <a href="#projects" class="btn btn-outline-light">View My Work</a>
+                        <a href="#projects" class="btn btn-secondary btn-services">My Services</a>
                     </div>
                 </div>
                 <div class="col-md-6 text-center" data-aos="fade-left" data-aos-duration="1000">
@@ -336,7 +335,7 @@
                 </div>
                 <div class="col-md-6" data-aos="fade-right" data-aos-duration="1000">
                     <h3>Who am I?</h3>
-                    <p>{{ about }}</p>
+                    <p class="text-center">{{ about }}</p>
                     <div class="personal-info">
                         <div class="info-item">
                             <span class="info-title">Name:</span>
@@ -352,7 +351,9 @@
                         </div>
                         <div class="info-item">
                             <span class="info-title">Location:</span>
-                            <span class="info-value">{{ location }}</span>
+                            <span class="info-value">
+                                <a href="{{ location_link }}" target="_blank" class="location-link">{{ location }}</a>
+                            </span>
                         </div>
                     </div>
                     <div class="social-links mt-4">
@@ -536,7 +537,7 @@
                             </div>
                             <div class="text">
                                 <h3>Location</h3>
-                                <p>{{ location }}</p>
+                                <p><a href="{{ location_link }}" target="_blank" class="location-link">{{ location }}</a></p>
                             </div>
                         </div>
                         <div class="contact-item">
