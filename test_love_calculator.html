@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Love Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #ff6b9d, #ff8a80);
+            color: white;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background: #fff;
+            color: #ff6b9d;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 10px 5px;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+        }
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            text-align: center;
+        }
+        .percentage {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        .test-cases {
+            margin-top: 30px;
+        }
+        .test-case {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💖 Love Calculator Test</h1>
+        <p>Test the love calculator algorithm with different name combinations</p>
+        
+        <div>
+            <input type="text" id="boyName" placeholder="Boy's Name" value="John">
+            <input type="text" id="girlName" placeholder="Girl's Name" value="Jane">
+            <button onclick="calculateLove()">Calculate Love</button>
+            <button onclick="runTestCases()">Run Test Cases</button>
+        </div>
+        
+        <div id="result" style="display: none;"></div>
+        
+        <div class="test-cases">
+            <h3>📊 Test Cases</h3>
+            <div id="testResults"></div>
+        </div>
+    </div>
+
+    <script>
+        function loveCalculator(boyName, girlName) {
+            // Convert to lowercase and remove spaces
+            const boy = boyName.toLowerCase().replace(/\s/g, "");
+            const girl = girlName.toLowerCase().replace(/\s/g, "");
+            
+            // Count common letters
+            const commonLetters = new Set([...boy].filter(letter => girl.includes(letter)));
+            const countCommon = commonLetters.size;
+            
+            // Calculate score
+            const totalLength = boy.length + girl.length;
+            let score = (countCommon * 7 + totalLength * 3) % 101; // 0–100
+
+            // Always show more than 50% love 💖
+            if (score < 51) {
+                score += 50;
+                if (score > 100) {
+                    score = 100;
+                }
+            }
+
+            return score;
+        }
+
+        function calculateLove() {
+            const boyName = document.getElementById('boyName').value.trim();
+            const girlName = document.getElementById('girlName').value.trim();
+            const resultDiv = document.getElementById('result');
+            
+            if (!boyName || !girlName) {
+                alert('Please enter both names');
+                return;
+            }
+            
+            const percentage = loveCalculator(boyName, girlName);
+            
+            let status, message;
+            if (percentage >= 90) {
+                status = "Perfect Match!";
+                message = "You two are made for each other! 💕";
+            } else if (percentage >= 80) {
+                status = "Excellent Compatibility!";
+                message = "Amazing connection! 💖";
+            } else if (percentage >= 70) {
+                status = "Great Match!";
+                message = "Strong compatibility! 💗";
+            } else if (percentage >= 60) {
+                status = "Good Compatibility";
+                message = "Nice connection! 💝";
+            } else {
+                status = "Growing Love";
+                message = "Love is in the air! 💞";
+            }
+            
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                <h3>${boyName} ❤️ ${girlName}</h3>
+                <div class="percentage">${percentage}%</div>
+                <h4>${status}</h4>
+                <p>${message}</p>
+            `;
+        }
+
+        function runTestCases() {
+            const testCases = [
+                ['John', 'Jane'],
+                ['Romeo', 'Juliet'],
+                ['Jack', 'Rose'],
+                ['Harry', 'Hermione'],
+                ['Edward', 'Bella'],
+                ['Noah', 'Allie'],
+                ['Prasiddha', 'Priya'],
+                ['Ram', 'Sita'],
+                ['Krishna', 'Radha'],
+                ['Arjun', 'Subhadra']
+            ];
+            
+            const testResultsDiv = document.getElementById('testResults');
+            testResultsDiv.innerHTML = '';
+            
+            testCases.forEach(([boy, girl]) => {
+                const percentage = loveCalculator(boy, girl);
+                const testCase = document.createElement('div');
+                testCase.className = 'test-case';
+                testCase.innerHTML = `
+                    <span>${boy} ❤️ ${girl}</span>
+                    <span><strong>${percentage}%</strong></span>
+                `;
+                testResultsDiv.appendChild(testCase);
+            });
+        }
+
+        // Run test cases on page load
+        window.onload = function() {
+            runTestCases();
+        };
+    </script>
+</body>
+</html>

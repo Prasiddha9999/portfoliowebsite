@@ -1,0 +1,290 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Services - {{ name }}</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <!-- Theme Switcher -->
+    <div class="theme-switcher" id="theme-switcher">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <!-- Services Header -->
+    <div class="services-header">
+        <div class="container">
+            <div class="services-header-content">
+                <!-- Back Button -->
+                <button class="back-button" onclick="window.location.href='/'">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back to Home</span>
+                </button>
+
+                <!-- Services Title -->
+                <h1 class="services-title">
+                    <i class="fas fa-tools"></i>
+                    My Services
+                </h1>
+
+                <!-- Close Button -->
+                <button class="close-button" onclick="window.location.href='/'">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Services Grid Section -->
+    <section class="py-5 bg-light" style="margin-top: 20px;">
+        <div class="container">
+            <div class="row g-4">
+
+                <!-- Date Converter Service -->
+                <div class="col-lg-4 col-md-6" data-aos="fade-up">
+                    <div class="service-card h-100">
+                        <div class="service-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <h4>Nepali Date Converter</h4>
+                        <p>Convert dates between Nepali BS and English AD with high accuracy. Supports years 2000-2090 BS.</p>
+                        <button class="btn btn-primary" onclick="openDateConverter()">
+                            <i class="fas fa-calendar-alt me-2"></i>Open Converter
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Weather Service -->
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="service-card h-100">
+                        <div class="service-icon">
+                            <i class="fas fa-cloud-sun"></i>
+                        </div>
+                        <h4>Weather Forecast</h4>
+                        <p>Get real-time weather information and forecasts for any location worldwide.</p>
+                        <button class="btn btn-primary" onclick="openWeatherApp()">
+                            <i class="fas fa-cloud-sun me-2"></i>Check Weather
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Horoscope Service -->
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                    <div class="service-card h-100">
+                        <div class="service-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h4>Daily Horoscope (Rasifal)</h4>
+                        <p>Get your daily horoscope predictions based on your zodiac sign.</p>
+                        <button class="btn btn-primary" onclick="openHoroscope()">
+                            <i class="fas fa-star me-2"></i>Read Horoscope
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Love Calculator Service -->
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                    <div class="service-card h-100">
+                        <div class="service-icon">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <h4>Love Calculator</h4>
+                        <p>Calculate love compatibility between two people and discover your romantic connection percentage.</p>
+                        <button class="btn btn-primary" onclick="openLoveCalculator()">
+                            <i class="fas fa-heart me-2"></i>Calculate Love
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Date Converter Modal -->
+    <div class="service-modal" id="dateConverterModal">
+        <div class="service-modal-content">
+            <div class="service-modal-header">
+                <h3><i class="fas fa-calendar-alt me-2"></i>Nepali Date Converter</h3>
+                <button class="close-btn" onclick="closeDateConverter()">&times;</button>
+            </div>
+            <div class="service-modal-body">
+                <form method="post" class="date-converter-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="date_converter" value="1">
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Date (YYYY-MM-DD)</label>
+                        <input type="date" class="form-control" id="date" name="date" required>
+                        <div class="form-text">
+                            <small>Examples: 2059-06-09 (BS) ↔ 2002-09-25 (AD)</small>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Conversion Type</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="conversion_type" id="en_to_np" value="en_to_np" checked>
+                            <label class="form-check-label" for="en_to_np">
+                                AD to BS (English to Nepali)
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="conversion_type" id="np_to_en" value="np_to_en">
+                            <label class="form-check-label" for="np_to_en">
+                                BS to AD (Nepali to English)
+                            </label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Convert Date</button>
+                </form>
+
+                {% if converted_date %}
+                <div class="conversion-result mt-4">
+                    <h5>Conversion Result:</h5>
+                    <div class="result-item">
+                        <strong>Original:</strong> {{ date_input }} ({{ original_format }})
+                    </div>
+                    <div class="result-item">
+                        <strong>Converted:</strong> {{ converted_date }} ({{ converted_format }})
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Weather Modal -->
+    <div class="service-modal" id="weatherModal">
+        <div class="service-modal-content">
+            <div class="service-modal-header">
+                <h3><i class="fas fa-cloud-sun me-2"></i>Weather Forecast</h3>
+                <button class="close-btn" onclick="closeWeatherApp()">&times;</button>
+            </div>
+            <div class="service-modal-body">
+                <div class="weather-app">
+                    <div class="weather-search mb-4">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="cityInput" placeholder="Enter city name...">
+                            <button class="btn btn-primary" onclick="getWeather()">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="weather-display" id="weatherDisplay">
+                        <div class="text-center text-muted">
+                            <i class="fas fa-cloud-sun fa-3x mb-3"></i>
+                            <p>Enter a city name to get weather information</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Horoscope Modal -->
+    <div class="service-modal" id="horoscopeModal">
+        <div class="service-modal-content">
+            <div class="service-modal-header">
+                <h3><i class="fas fa-star me-2"></i>Daily Horoscope</h3>
+                <button class="close-btn" onclick="closeHoroscope()">&times;</button>
+            </div>
+            <div class="service-modal-body">
+                <div class="horoscope-app">
+                    <div class="zodiac-selector mb-4">
+                        <label class="form-label">Select your zodiac sign:</label>
+                        <select class="form-select" id="zodiacSelect">
+                            <option value="">Choose your sign...</option>
+                            <option value="aries">Aries (मेष)</option>
+                            <option value="taurus">Taurus (वृषभ)</option>
+                            <option value="gemini">Gemini (मिथुन)</option>
+                            <option value="cancer">Cancer (कर्कट)</option>
+                            <option value="leo">Leo (सिंह)</option>
+                            <option value="virgo">Virgo (कन्या)</option>
+                            <option value="libra">Libra (तुला)</option>
+                            <option value="scorpio">Scorpio (वृश्चिक)</option>
+                            <option value="sagittarius">Sagittarius (धनु)</option>
+                            <option value="capricorn">Capricorn (मकर)</option>
+                            <option value="aquarius">Aquarius (कुम्भ)</option>
+                            <option value="pisces">Pisces (मीन)</option>
+                        </select>
+                        <button class="btn btn-primary mt-3 w-100" onclick="getHoroscope()">
+                            <i class="fas fa-star me-2"></i>Get Today's Horoscope
+                        </button>
+                    </div>
+                    <div class="horoscope-display" id="horoscopeDisplay">
+                        <div class="text-center text-muted">
+                            <i class="fas fa-star fa-3x mb-3"></i>
+                            <p>Select your zodiac sign to get today's horoscope</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Love Calculator Modal -->
+    <div class="service-modal" id="loveCalculatorModal">
+        <div class="service-modal-content">
+            <div class="service-modal-header">
+                <h3><i class="fas fa-heart me-2"></i>Love Calculator</h3>
+                <button class="close-btn" onclick="closeLoveCalculator()">&times;</button>
+            </div>
+            <div class="service-modal-body">
+                <div class="love-calculator-app">
+                    <div class="love-form mb-4">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="boyName" class="form-label">
+                                    <i class="fas fa-male text-primary me-2"></i>Boy's Name
+                                </label>
+                                <input type="text" class="form-control" id="boyName" placeholder="Enter boy's name...">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="girlName" class="form-label">
+                                    <i class="fas fa-female text-danger me-2"></i>Girl's Name
+                                </label>
+                                <input type="text" class="form-control" id="girlName" placeholder="Enter girl's name...">
+                            </div>
+                        </div>
+                        <div class="text-center mt-4">
+                            <button class="btn btn-primary btn-lg" onclick="calculateLove()">
+                                <i class="fas fa-heart me-2"></i>Calculate Love Compatibility
+                            </button>
+                        </div>
+                    </div>
+                    <div class="love-result" id="loveResult">
+                        <div class="text-center text-muted">
+                            <i class="fas fa-heart fa-3x mb-3 text-pink"></i>
+                            <p>Enter both names to calculate love compatibility</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay -->
+    <div class="service-overlay" id="serviceOverlay"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- AOS Animation -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <!-- Custom JS -->
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/services.js' %}"></script>
+</body>
+</html>

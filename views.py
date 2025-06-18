@@ -74,84 +74,84 @@ def index(request):
             {
                 'title': 'Sewa Ghar',
                 'description': 'A Python-based home service provider web app where users select workers based on their details. (Concept of in driver)',
-                'image': 'project1.jpg',
+                'image': 'sewaghar.jpg',
                 'demo_link': '#',
                 'code_link': '#'
             },
             {
                 'title': 'Smart Car Parking System',
                 'description': 'Automatically assigns parking slots and opens doors when slots are free.',
-                'image': 'project2.jpg',
+                'image': 'carparking.jpg',
                 'demo_link': '#',
                 'code_link': '#'
             },
             {
                 'title': 'Gesture Control System',
                 'description': 'Controls video using sensors.',
-                'image': 'project3.jpg',
+                'image': 'gesturecontrol.jpg',
                 'demo_link': '#',
                 'code_link': '#'
             },
             {
                 'title': 'Scoreboard',
                 'description': 'An embedded system capable of adjusting game scores.',
-                'image': 'project4.jpg',
+                'image': 'scoreboard.jpg',
                 'demo_link': '#',
                 'code_link': '#'
             },
             {
                 'title': 'Weather App',
                 'description': 'Displays live weather using an API.',
-                'image': 'project5.jpg',
+                'image': 'weather.jpg',
                 'demo_link': '#',
                 'code_link': '#'
             },
             {
                 'title': 'House Price Prediction',
                 'description': 'Utilizes big data to forecast house prices.',
-                'image': 'project6.jpg',
+                'image': 'house.jpeg',
                 'demo_link': '#',
                 'code_link': '#'
             },
             {
                 'title': 'E-commerce Platform',
                 'description': 'Customer can order and buy products.',
-                'image': 'project7.jpg',
+                'image': 'ecommerce.jpg',
                 'demo_link': '#',
                 'code_link': '#'
             },
             {
                 'title': 'Gym Management System',
                 'description': 'Allows users access to gym videos after payment.',
-                'image': 'project8.jpg',
+                'image': 'gym.jpg',
                 'demo_link': '#',
                 'code_link': '#'
             },
             {
                 'title': 'Bikes Price Prediction',
                 'description': 'Uses regression to estimate bikes prices.',
-                'image': 'project9.jpg',
+                'image': 'bike.jpg',
                 'demo_link': '#',
                 'code_link': '#'
             },
             {
                 'title': 'Tour Management System',
                 'description': 'Simplifies tour bookings, enabling easy reservations.',
-                'image': 'project10.jpg',
+                'image': 'tour.jpg',
                 'demo_link': '#',
                 'code_link': '#'
             },
             {
                 'title': 'Image Classification using CNN',
                 'description': 'To classify images of vegetables and fruits by their names.',
-                'image': 'project11.jpg',
+                'image': 'imageclassification.jpg',
                 'demo_link': '#',
                 'code_link': '#'
             },
             {
                 'title': 'Plant Disease Detection',
                 'description': 'To classify the types of disease of plants.',
-                'image': 'project12.jpg',
+                'image': 'plant.jpg',
                 'demo_link': '#',
                 'code_link': '#'
             }

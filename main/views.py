@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
-from .models import Contact
+from django.http import JsonResponse
+from django.utils import timezone
+from .models import Contact, Education, Experience, Project, About, DailyHoroscope
 from .nepali_date_converter import NepaliDateConverter
 
 @csrf_exempt
@@ -79,6 +81,9 @@ def index(request):
 
             return redirect('index')
 
+    # Get active About section
+    about_section = About.objects.filter(is_active=True).first()
+
     context = {
         'name': 'Prasiddha Regmi',
         'title': 'Full Stack Web Application Developer',
@@ -88,7 +93,7 @@ def index(request):
         'location_link': 'https://g.co/kgs/3UCF7nh',
         'github': 'https://github.com/Prasiddha9999',
         'linkedin': 'https://www.linkedin.com/in/prasiddha-regmi-693763211/',
-        'about': 'I am a Full Stack Web Application developer specialized in technologies like Python, Django, and React API, also having a good command of front-end technologies like HTML, CSS, and JavaScript. Passionate developer with strong administrative and communication skills, good attention to detail, and the ability to write neat and clean codes and develop projects with Python backend technologies.',
+        'about_section': about_section,
         'skills': {
             'technical': [
                 {'name': 'Python', 'percentage': 90},
@@ -97,7 +102,6 @@ def index(request):
                 {'name': 'SQL / NoSQL', 'percentage': 75},
                 {'name': 'C, Java, C#', 'percentage': 70},
                 {'name': 'AI, Data Science, ML, DL', 'percentage': 65},
-                {'name': 'Django Framework', 'percentage': 85},
                 {'name': 'Azure, AWS', 'percentage': 60},
             ],
             'soft': [
@@ -109,65 +113,48 @@ def index(request):
             ],
             'languages': ['English', 'Hindi', 'Nepali']
         },
-        'experience': [
-            {
-                'title': 'Data Science Intern',
-                'company': 'Wayspire',
-                'period': 'Jan 2024 - May 2024',
-                'responsibilities': [
-                    'Worked on data analysis and machine learning models.',
-                    'Gained hands-on experience in data preprocessing and insights generation.'
-                ]
-            },
-            {
-                'title': 'IT Supporter Intern',
-                'company': 'Herald College Kathmandu',
-                'period': 'Jan 2022 - Dec 2022',
-                'responsibilities': [
-                    'Assisted with network control, LAN/WAN, and Microsoft Office support.',
-                    'Provided customer service and troubleshooting assistance.'
-                ]
-            }
-        ],
-        'education': [
-            {
-                'degree': 'MSc-CS',
-                'institution': 'Sharda University',
-                'period': '2023 - Present',
-                'description': ''
-            },
-            {
-                'degree': 'BSc (Hons) in Computer Science',
-                'institution': 'University Of Wolver Hampton',
-                'period': '2020 - 2023',
-                'description': 'Got 1st class Honors Degree'
-            }
-        ],
-        'projects': [
-            {
-                'title': 'Sewa Ghar',
-                'description': 'A Python-based home service provider web app where users select workers based on their details. (Concept of in driver)',
-                'image': 'sewaghar.jpg',
-                'demo_link': '#',
-                'code_link': '#'
-            },
-            {
-                'title': 'Smart Car Parking System',
-                'description': 'Automatically assigns parking slots and opens doors when slots are free.',
-                'image': 'carparking.jpg',
-                'demo_link': '#',
-                'code_link': '#'
-            },
-            {
-                'title': 'Gesture Control System',
-                'description': 'Controls video using sensors.',
-                'image': 'gesturecontrol.jpg',
-                'demo_link': '#',
-                'code_link': '#'
-            }
-        ]
+        'experience': Experience.objects.filter(is_active=True).order_by('order', '-created_at'),
+        'education': Education.objects.filter(is_active=True).order_by('order', '-created_at'),
+        'projects': Project.objects.filter(is_active=True).order_by('order', '-created_at')
     }
     return render(request, 'main/index.html', context)
+
+def services(request):
+    context = {
+        'name': 'Prasiddha',
+    }
+
+    # Handle date converter form submission
+    if request.method == 'POST' and 'date_converter' in request.POST:
+        date_str = request.POST.get('date')
+        conversion_type = request.POST.get('conversion_type')
+
+        try:
+            # Initialize the accurate Nepali date converter
+            converter = NepaliDateConverter()
+
+            if conversion_type == 'en_to_np':
+                # Convert English AD to Nepali BS
+                converted_date = converter.convert_date(date_str, 'ad_to_bs')
+                original_format = "English (AD)"
+                converted_format = "Nepali (BS)"
+            else:
+                # Convert Nepali BS to English AD
+                converted_date = converter.convert_date(date_str, 'bs_to_ad')
+                original_format = "Nepali (BS)"
+                converted_format = "English (AD)"
+
+            context.update({
+                'converted_date': converted_date,
+                'date_input': date_str,
+                'original_format': original_format,
+                'converted_format': converted_format,
+            })
+
+        except ValueError as e:
+            context['error_message'] = str(e)
+
+    return render(request, 'main/services.html', context)
 
 def thank_you(request):
     """
@@ -180,3 +167,74 @@ def thank_you(request):
         'contact_subject': request.session.get('contact_subject', '')
     }
     return render(request, 'main/thank_you.html', context)
+
+def horoscope_api(request, sign):
+    """API endpoint to get daily horoscope for a zodiac sign"""
+    try:
+        today = timezone.now().date()
+
+        # Try to get today's horoscope for the sign
+        horoscope = DailyHoroscope.objects.filter(
+            zodiac_sign=sign.lower(),
+            date=today,
+            is_active=True
+        ).first()
+
+        if not horoscope:
+            # If no horoscope for today, get the most recent one
+            horoscope = DailyHoroscope.objects.filter(
+                zodiac_sign=sign.lower(),
+                is_active=True
+            ).order_by('-date').first()
+
+        if horoscope:
+            # Return horoscope data in the expected format
+            data = {
+                'current_date': horoscope.date.strftime('%B %d, %Y'),
+                'compatibility': horoscope.compatibility or '',
+                'lucky_time': horoscope.lucky_time,
+                'lucky_number': horoscope.lucky_number,
+                'color': horoscope.lucky_color,
+                'date_range': horoscope.get_date_range(),
+                'mood': horoscope.mood,
+                'description': horoscope.description
+            }
+            return JsonResponse(data)
+        else:
+            # Return fallback data if no horoscope found
+            fallback_data = {
+                'current_date': today.strftime('%B %d, %Y'),
+                'compatibility': 'Cancer',
+                'lucky_time': '9am',
+                'lucky_number': 7,
+                'color': 'Blue',
+                'date_range': get_zodiac_date_range(sign.lower()),
+                'mood': 'Positive',
+                'description': 'The stars suggest that today brings new opportunities for growth and success. Stay positive and trust your instincts. Good things are coming your way!'
+            }
+            return JsonResponse(fallback_data)
+
+    except Exception as e:
+        # Return error response
+        return JsonResponse({
+            'error': 'Failed to fetch horoscope',
+            'message': str(e)
+        }, status=500)
+
+def get_zodiac_date_range(sign):
+    """Helper function to get date range for zodiac signs"""
+    date_ranges = {
+        'aries': 'Mar 21 - Apr 20',
+        'taurus': 'Apr 21 - May 21',
+        'gemini': 'May 22 - Jun 21',
+        'cancer': 'Jun 22 - Jul 22',
+        'leo': 'Jul 23 - Aug 23',
+        'virgo': 'Aug 24 - Sep 23',
+        'libra': 'Sep 24 - Oct 23',
+        'scorpio': 'Oct 24 - Nov 22',
+        'sagittarius': 'Nov 23 - Dec 21',
+        'capricorn': 'Dec 22 - Jan 20',
+        'aquarius': 'Jan 21 - Feb 19',
+        'pisces': 'Feb 20 - Mar 20',
+    }
+    return date_ranges.get(sign, '')

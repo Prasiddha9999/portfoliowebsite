@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Horoscope API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #6c63ff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #5a52d5;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #6c63ff;
+        }
+        .loading {
+            color: #666;
+            font-style: italic;
+        }
+        .error {
+            color: #dc3545;
+            background: #f8d7da;
+            border-left-color: #dc3545;
+        }
+        .success {
+            color: #155724;
+            background: #d4edda;
+            border-left-color: #28a745;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔮 Horoscope API Test</h1>
+        <p>Test the Aztro API integration for horoscope services</p>
+        
+        <div>
+            <h3>Select Zodiac Sign:</h3>
+            <button onclick="testHoroscope('aries')">♈ Aries</button>
+            <button onclick="testHoroscope('taurus')">♉ Taurus</button>
+            <button onclick="testHoroscope('gemini')">♊ Gemini</button>
+            <button onclick="testHoroscope('cancer')">♋ Cancer</button>
+            <button onclick="testHoroscope('leo')">♌ Leo</button>
+            <button onclick="testHoroscope('virgo')">♍ Virgo</button>
+            <button onclick="testHoroscope('libra')">♎ Libra</button>
+            <button onclick="testHoroscope('scorpio')">♏ Scorpio</button>
+            <button onclick="testHoroscope('sagittarius')">♐ Sagittarius</button>
+            <button onclick="testHoroscope('capricorn')">♑ Capricorn</button>
+            <button onclick="testHoroscope('aquarius')">♒ Aquarius</button>
+            <button onclick="testHoroscope('pisces')">♓ Pisces</button>
+        </div>
+        
+        <div id="result" class="result" style="display: none;">
+            <!-- Results will appear here -->
+        </div>
+    </div>
+
+    <script>
+        async function testHoroscope(sign) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result loading';
+            resultDiv.innerHTML = `
+                <h3>🔄 Testing ${sign.charAt(0).toUpperCase() + sign.slice(1)} Horoscope...</h3>
+                <p>Calling Aztro API...</p>
+            `;
+
+            try {
+                // Use the same API call as in your services.js
+                const params = new URLSearchParams();
+                params.append('sign', sign);
+                params.append('day', 'today');
+
+                const response = await fetch('https://aztro.sameerkumar.website/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: params
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                // Display success result
+                resultDiv.className = 'result success';
+                resultDiv.innerHTML = `
+                    <h3>✅ API Test Successful!</h3>
+                    <h4>${sign.charAt(0).toUpperCase() + sign.slice(1)} Horoscope for ${data.current_date}</h4>
+                    <p><strong>Date Range:</strong> ${data.date_range}</p>
+                    <p><strong>Description:</strong> ${data.description}</p>
+                    <p><strong>Lucky Number:</strong> ${data.lucky_number}</p>
+                    <p><strong>Lucky Color:</strong> ${data.color}</p>
+                    <p><strong>Lucky Time:</strong> ${data.lucky_time}</p>
+                    <p><strong>Mood:</strong> ${data.mood}</p>
+                    <p><strong>Compatibility:</strong> ${data.compatibility}</p>
+                    
+                    <details style="margin-top: 15px;">
+                        <summary>Raw API Response</summary>
+                        <pre style="background: #f1f1f1; padding: 10px; border-radius: 5px; overflow-x: auto; font-size: 12px;">${JSON.stringify(data, null, 2)}</pre>
+                    </details>
+                `;
+
+            } catch (error) {
+                console.error('API Test Error:', error);
+                
+                // Display error result
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `
+                    <h3>❌ API Test Failed</h3>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <p><strong>Possible causes:</strong></p>
+                    <ul>
+                        <li>CORS policy blocking the request</li>
+                        <li>API server is down</li>
+                        <li>Network connectivity issues</li>
+                        <li>Invalid request format</li>
+                    </ul>
+                    <p><strong>Note:</strong> The API should work fine when called from your Django application server-side or through a proxy.</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -5,38 +5,13 @@
 
 // Wait for the DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
-    // Preloader
-    const preloader = document.getElementById('preloader');
-    if (preloader) {
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                preloader.classList.add('fade-out');
-                setTimeout(function() {
-                    preloader.style.display = 'none';
-                }, 200);
-            }, 200);
-        });
-
-        // If window already loaded
-        if (document.readyState === 'complete') {
-            setTimeout(function() {
-                preloader.classList.add('fade-out');
-                setTimeout(function() {
-                    preloader.style.display = 'none';
-                }, 200);
-            }, 200);
-        }
-    }
-
-    // Initialize AOS Animation Library with delay for preloader
-    setTimeout(function() {
-        AOS.init({
-            duration: 400,
-            once: true,
-            mirror: false,
-            offset: 50
-        });
-    }, 400);
+    // Initialize AOS Animation Library
+    AOS.init({
+        duration: 400,
+        once: true,
+        mirror: false,
+        offset: 50
+    });
 
     // Typed.js for animated text in hero section
     const options = {
@@ -110,7 +85,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         sections.forEach(section => {
             const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
 
             if (window.scrollY >= (sectionTop - 100)) {
                 current = section.getAttribute('id');
@@ -125,129 +99,49 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // No contact form handling in JavaScript - form submits directly to server
+    // Contact form submits directly to server - no JavaScript handling needed
 
-    // Date Converter Toggle
-    const dateConverterToggle = document.getElementById('date-converter-toggle');
-    const dateConverter = document.getElementById('date-converter');
-    const closeConverterBtn = document.getElementById('close-converter');
-
-    if (dateConverterToggle && dateConverter) {
-        dateConverterToggle.addEventListener('click', function() {
-            if (dateConverter.style.display === 'none') {
-                dateConverter.style.display = 'block';
-            } else {
-                dateConverter.style.display = 'none';
-            }
-        });
-    }
-
-    // Close date converter with the close button
-    if (closeConverterBtn) {
-        closeConverterBtn.addEventListener('click', function() {
-            dateConverter.style.display = 'none';
-        });
-    }
-
-    // Date Conversion Result Overlay
-    const overlay = document.getElementById('overlay');
-    const dateConverterResult = document.getElementById('date-converter-result');
-    const closeResultBtn = document.getElementById('close-result');
-
-    // Get the show-overlay flag
-    const showOverlay = document.getElementById('show-overlay');
-
-    // Show result if available and flag is set to true
-    if (dateConverterResult && dateConverterResult.querySelector('.result-item') &&
-        showOverlay && showOverlay.value === 'true') {
-        overlay.classList.add('active');
-        dateConverterResult.classList.add('active');
-
-        // Reset the flag after showing the overlay once
-        showOverlay.value = 'false';
-    }
-
-    // Close result
-    if (closeResultBtn) {
-        closeResultBtn.addEventListener('click', function() {
-            overlay.classList.remove('active');
-            dateConverterResult.classList.remove('active');
-            // Reset the flag
-            if (showOverlay) {
-                showOverlay.value = 'false';
-            }
-        });
-    }
-
-    // Close result when clicking on overlay
-    if (overlay) {
-        overlay.addEventListener('click', function() {
-            overlay.classList.remove('active');
-            dateConverterResult.classList.remove('active');
-            // Reset the flag
-            if (showOverlay) {
-                showOverlay.value = 'false';
-            }
-        });
-    }
-
-    // Load more projects functionality
-    const loadMoreBtn = document.getElementById('load-more');
+    // Load More Projects functionality
+    const loadMoreBtn = document.getElementById('load-more-projects');
     if (loadMoreBtn) {
         loadMoreBtn.addEventListener('click', function() {
-            // This is where you would typically load more projects from a server
-            // For now, we'll just add some hardcoded projects
+            const hiddenProjects = document.querySelectorAll('.hidden-project');
+            let projectsToShow = 3; // Show 3 more projects at a time
+            let shownCount = 0;
 
-            const projectsContainer = document.querySelector('#projects .row:first-of-type');
+            hiddenProjects.forEach((project) => {
+                if (shownCount < projectsToShow && project.style.display === 'none') {
+                    // Show the project with animation
+                    project.style.display = 'block';
 
-            const additionalProjects = [
-                {
-                    title: 'Scoreboard',
-                    description: 'An embedded system capable of adjusting game scores.',
-                    image: 'scoreboard.jpg',
-                    category: 'IoT'
-                },
-                {
-                    title: 'Weather App',
-                    description: 'Displays live weather using an API.',
-                    image: 'weather.jpg',
-                    category: 'Web App'
-                },
-                {
-                    title: 'House Price Prediction',
-                    description: 'Utilizes big data to forecast house prices.',
-                    image: 'house.jpeg',
-                    category: 'ML/AI'
+                    // Trigger animation after a small delay
+                    setTimeout(() => {
+                        project.classList.add('show');
+
+                        // Initialize AOS for newly shown projects
+                        if (typeof AOS !== 'undefined') {
+                            AOS.refresh();
+                        }
+                    }, 100 * shownCount);
+
+                    shownCount++;
                 }
-            ];
-
-            additionalProjects.forEach((project, index) => {
-                const projectHTML = `
-                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="${index * 100}">
-                    <div class="project-card">
-                        <div class="project-img">
-                            <img src="static/img/projects/${project.image}" alt="${project.title}" class="img-fluid">
-                            <div class="project-overlay">
-                                <span class="project-category">${project.category}</span>
-                            </div>
-                        </div>
-                        <div class="project-content">
-                            <h3>${project.title}</h3>
-                            <p>${project.description}</p>
-                            <div class="project-links">
-                                <a href="#" class="btn btn-sm btn-outline-primary"><i class="fas fa-globe"></i> Demo</a>
-                                <a href="#" class="btn btn-sm btn-outline-dark"><i class="fab fa-github"></i> Code</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                `;
-
-                projectsContainer.insertAdjacentHTML('beforeend', projectHTML);
             });
 
-            // Hide the load more button after loading all projects
-            this.style.display = 'none';
+            // Check if all projects are now visible
+            const remainingHidden = Array.from(hiddenProjects).filter(
+                project => project.style.display === 'none'
+            );
+
+            if (remainingHidden.length === 0) {
+                // Hide the load more button with animation
+                this.style.transform = 'scale(0.8)';
+                this.style.opacity = '0.5';
+
+                setTimeout(() => {
+                    this.style.display = 'none';
+                }, 300);
+            }
         });
     }
 
@@ -346,6 +240,38 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 floatingActionBtn.innerHTML = '<i class="fas fa-plus"></i>';
             }
+        });
+    }
+
+    // Mobile navbar behavior - close when clicking outside
+    const navbarCollapse = document.querySelector('.navbar-collapse');
+    const navbarToggler = document.querySelector('.navbar-toggler');
+
+    if (navbarCollapse && navbarToggler) {
+        // Close navbar when clicking outside
+        document.addEventListener('click', function(event) {
+            const isClickInsideNav = navbarCollapse.contains(event.target) || navbarToggler.contains(event.target);
+            const isNavbarOpen = navbarCollapse.classList.contains('show');
+
+            if (!isClickInsideNav && isNavbarOpen) {
+                // Use Bootstrap's collapse method to close the navbar
+                const bsCollapse = new bootstrap.Collapse(navbarCollapse, {
+                    toggle: false
+                });
+                bsCollapse.hide();
+            }
+        });
+
+        // Close navbar when clicking on nav links (mobile)
+        document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
+            link.addEventListener('click', function() {
+                if (navbarCollapse.classList.contains('show')) {
+                    const bsCollapse = new bootstrap.Collapse(navbarCollapse, {
+                        toggle: false
+                    });
+                    bsCollapse.hide();
+                }
+            });
         });
     }
 });
